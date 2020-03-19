@@ -37,3 +37,9 @@ vectorizer = TfidfVectorizer(tokenizer=make_tokens)
 x = vectorizer.fit_transform(url_list)
 
 x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
+
+logit = LogisticRegression()
+logit.fit(x_train, y_train)
+
+print('Accuracy : ', logit.score(x_test, y_test))
+
