@@ -27,3 +27,13 @@ def make_tokens(f):
     if 'com' in total_tokens:
         total_tokens.remove('com')
     return total_tokens
+
+
+y = urls['label']
+# print(y)
+url_list = urls['url']
+
+vectorizer = TfidfVectorizer(tokenizer=make_tokens)
+x = vectorizer.fit_transform(url_list)
+
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.2, random_state=42)
