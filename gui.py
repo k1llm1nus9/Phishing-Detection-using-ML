@@ -125,6 +125,11 @@ def open_window():
     Label(top, text='Blocked URLs', padx=20, pady=10, font=ui_font).pack()
 
    # out put table
+    table = fetch_table()
+
+    for i in range(len(table)):
+        for j in range(len(table[i])):
+            Label(table_frame, text=table[i][j], justify=LEFT, padx=10, pady=7).grid(column=j, row=i)
 
     table_frame.pack()
 
