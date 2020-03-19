@@ -4,6 +4,17 @@ from tkinter import Tk, Label, Entry, Button, messagebox, CENTER, BOTTOM, LEFT, 
     font, Frame
 import re
 import random
+import mysql.connector as mc
+
+connection = mc.connect(host='localhost', user='root', password='', database='pyproj')
+db_cursor = connection.cursor()
+create_sql = 'CREATE TABLE IF NOT EXISTS `blocked_urls`' \
+             '( `url_id` int(11) NOT NULL AUTO_INCREMENT, `url_text` varchar(100) NOT NULL,' \
+             ' `url_ip` varchar(45) DEFAULT NULL, PRIMARY KEY (`url_id`))' \
+             ' ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;'
+
+db_cursor.execute(create_sql)
+
 
 # db connection code goes here
 
@@ -22,7 +33,20 @@ def alert():
     messagebox.showinfo('Alerting Authorities', 'Cyber Cell has been notified of malicious URL')
 
 
+def insert_to_db(url_val, master=None):
+    ip = ".".join('%s' % random.randint(10, 190) for i in range(4))
+    db_cursor.execute("INSERT INTO blocked_urls (url_text, url_ip) VALUES ('{0}','{1}');".format(url_val, ip))
+    for widget in master.winfo_children():
+        widget.destroy()
+    table = fetch_table()
 
+    for i in range(len(table)):
+        for j in range(len(table[i])):
+            Label(master, text=table[i][j], justify=LEFT, padx=10, pady=7).grid(column=j, row=i)
+
+    connection.commit()
+    db_cursor.close()
+    connection.close()
 
 
 def button_frame(master, url_val=None, top=None):
@@ -48,6 +72,11 @@ def button_frame(master, url_val=None, top=None):
 #             Label(master, text=row[i], relief='solid', padx=10, pady=10, bd=1).pack(side=LEFT)
 
 # fetch table
+def fetch_table():
+    db_cursor.execute('SELECT * FROM blocked_urls;')
+    rows = db_cursor.fetchall()
+    return rows
+
 
 def open_window():
     # root.iconify()
