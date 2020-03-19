@@ -11,3 +11,19 @@ urls = pd.read_csv('dataset.csv')
 # print(type(urls))
 
 print(urls.head())
+
+
+def make_tokens(f):
+    tokens_by_slash = str(f.encode('utf-8')).split('/')
+    total_tokens = []
+    for i in tokens_by_slash:
+        tokens = str(i).split('-')
+        tokens_by_dot = []
+        for j in range(0, len(tokens)):
+            temp_tokens = str(tokens[j]).split('.')
+            tokens_by_dot += temp_tokens
+        total_tokens += tokens + tokens_by_dot
+    total_tokens = list(set(total_tokens))
+    if 'com' in total_tokens:
+        total_tokens.remove('com')
+    return total_tokens
