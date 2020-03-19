@@ -5,7 +5,7 @@ from tkinter import Tk, Label, Entry, Button, messagebox, CENTER, BOTTOM, LEFT, 
 import re
 import random
 import mysql.connector as mc
-
+from prediction import predict_url
 connection = mc.connect(host='localhost', user='root', password='', database='pyproj')
 db_cursor = connection.cursor()
 create_sql = 'CREATE TABLE IF NOT EXISTS `blocked_urls`' \
@@ -93,9 +93,11 @@ def open_window():
     add_space(top, 20)
 
     # predict_url
-
-    # url_status = predicted_value[0].lower()
-    url_status = ''
+    print(url_value)
+    predicted_value = predict_url(url_value)
+    print(predicted_value)
+    print(str(predicted_value))
+    url_status = predicted_value[0].lower()
 
     if url_status == 'good':
         lbl_url = Label(top, text='Entered URL : ' + url_value + ' is legitimate', padx=20, pady=20,
